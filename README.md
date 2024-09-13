@@ -22,18 +22,18 @@ Requirements/boundaries
 
 ## Comparison of lightweight k8s distributions
 
-| Distribution               | k3s    | k3d    | kind                                                 | microk8s                                                                            | k0     |
-| -------------------------- | ------ | ------ | ---------------------------------------------------- | ----------------------------------------------------------------------------------- | ------ |
-| Team Member                | Thomas | Stefan | Till                                                 | Marius                                                                              | Julian |
-| Setup & Configuration      |        |        | see [here](#kind)                                    | snap, few lines, lots of ready to use addons (dns,ingress,hostpath-storage,metallb) |        |
-| Doku                       |        |        | very good                                            | sehr gut                                                                            |        |
-| Required Container Runtime |        |        | docker, podman or nerdctl                            | containerd (included)                                                               |        |
-| Ingress                    |        |        | easy to setup with prepared nginx-ingress controller | easy to setup (addon), traffic routed to nginx using metallb (addon)                |        |
-| Prerequisites              |        |        | go (>=1.16), docker, podman or nerdctl               | linux with snapd                                                                    |        |
-| Scalability                |        |        | possible, but only when creating the cluster         | easy, new nodes can be added with simple join commands                              |        |
-| Security                   |        |        | tbd                                                  |                                                                                     |        |
-| Performance                |        |        | tbd                                                  |                                                                                     |        |
-| Prod Ready                 |        |        | :check_mark:                                         | :heavy_check_mark:                                                                  |        |
+| Distribution               | k3s                         | k3d    | kind                                                 | microk8s                                                                            | k0     |
+| -------------------------- | --------------------------- | ------ | ---------------------------------------------------- | ----------------------------------------------------------------------------------- | ------ |
+| Team Member                | Thomas                      | Stefan | Till                                                 | Marius                                                                              | Julian |
+| Setup & Configuration      | Couple commands, quite easy |        | see [here](#kind)                                    | snap, few lines, lots of ready to use addons (dns,ingress,hostpath-storage,metallb) |        |
+| Documentation              | Lacking at ingress          |        | very good                                            | sehr gut                                                                            |        |
+| Required Container Runtime | cri compliant               |        | docker, podman or nerdctl                            | containerd (included)                                                               |        |
+| Ingress                    | Difficult. Setup seems old  |        | easy to setup with prepared nginx-ingress controller | easy to setup (addon), traffic routed to nginx using metallb (addon)                |        |
+| Prerequisites              | nA                          |        | go (>=1.16), docker, podman or nerdctl               | linux with snapd                                                                    |        |
+| Scalability                | Easy join command           |        | possible, but only when creating the cluster         | easy, new nodes can be added with simple join commands                              |        |
+| Security                   |                             |        | tbd                                                  |                                                                                     |        |
+| Performance                | Worst                       | Best   | tbd                                                  |                                                                                     | Mid    |
+| Prod Ready                 | :x:                         |        | :check_mark:                                         | :heavy_check_mark:                                                                  |        |
 
 ## Resources
 
@@ -161,6 +161,9 @@ Copy & Paste yml files for deployment of the wordpress application and do deploy
 
 
 ### kind
+#### General
+Kind (Kubernetes IN Docker) is a k8s solution which works on docker (containerd). It is part of the K8s project under the CNCF.
+
 #### setup
 - [install](https://kind.sigs.k8s.io)
 - requires go & docker to be installed on the machine
