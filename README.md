@@ -33,7 +33,7 @@ Requirements/boundaries
 | Scalability                | Easy join command           |        | possible, but only when creating the cluster         | easy, new nodes can be added with simple join commands                              |        |
 | Security                   |                             |        | tbd                                                  |                                                                                     |        |
 | Performance                | Worst                       | Best   | tbd                                                  |                                                                                     | Mid    |
-| Prod Ready                 | :x:                         |        | :check_mark:                                         | :heavy_check_mark:                                                                  |        |
+| Prod Ready                 | :x:                         |        | :heavy_check_mark:                                   | :heavy_check_mark:                                                                  |        |
 
 ## Resources
 
