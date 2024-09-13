@@ -71,6 +71,26 @@ Requirements/boundaries
 3. Setup Ingress
 4. Load Test
 
+### Deploy application
+
+```bash
+# clone repo
+git clone https://github.com/xpirit-training/innovationday-lightweight-k8s.git
+cd innovationday-lightweight-k8s
+
+# create ns
+kubectl create ns innoday
+
+# deploy
+kubectl -n innoday apply -f manifests
+
+# check deployment
+kubectl -n innoday get pods
+```
+
+### Test access
+
+
 ## Doc-Space
 
 ### kompose
@@ -102,6 +122,30 @@ Use the new cluster with kubectl, e.g.:
 `kubectl get nodes`
 `k3d kubeconfig get innodaycluster`
 
+Create a cluster, mapping the ingress port 80 to localhost:8081
+`k3d cluster create --api-port 6550 -p "8081:80@loadbalancer" --agents 2`
+
+`--api-port 6550` is not required for the example to work.
+It is used to have k3s’s API-Server listening on `port 6550` with that port mapped to the host system.
+the port-mapping construct `8081:80@loadbalancer` means:
+map port `8081` from the host to port `80` on the container which matches the nodefilter loadbalancer.
+the loadbalancer nodefilter matches only the serverlb that’s deployed in front of a cluster’s server nodes
+all ports exposed on the serverlb will be proxied to the same ports on all server nodes in the cluster
+
+Copy & Paste yml files for deployment of the wordpress application and do deployment:
+- Database
+`vim db.yml`
+`kubectl apply -f db.yml`
+
+- Wordpress
+`vim wordpress.yml`
+`kubectl apply -f wordpress.yml`
+
+- Expose
+`vim expose.yml`
+`kubectl apply -f expose.yml`
+
+kubectl get pods -w
 
 ### kind
 #### setup
@@ -121,6 +165,8 @@ sudo mv ./kind /usr/local/bin/kind
 #### create a cluster
 - Create a cluster with: `kind create cluster`
 
+#### deyployment
+- Deploy the application using kubectl like described [here](#deploy-application)
 
 ### microk8s
 
@@ -148,6 +194,9 @@ microk8s enable dns
 
 # add ingress
 microk8s enable ingress
+
+# add hostpath-storage
+microk8s enable hostpath-storage
 ```
 
 ### k0
@@ -170,9 +219,12 @@ microk8s enable ingress
 - mkdir -p ${HOME}/.k0s
 - k0s default-config | tee ${HOME}/.k0s/k0s.yaml
 - sudo k0s server -c ${HOME}/.k0s/k0s.yaml --enable-worker &
+
+sudo k0s server -c ${HOME}/.k0s/k0s.yaml --enable-worker < /dev/null &>/dev/null &
+
 - sudo cat /var/lib/k0s/pki/admin.conf | tee ~/.k0s/kubeconfig
 - sudo curl --output /usr/local/sbin/kubectl -L "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-
-
-- k0sctl init > k0sctl.yaml
-- k0sctl apply --config k0sctl.yaml
+- sudo chmod +x /usr/local/sbin/kubectl
+- sudo cat /var/lib/k0s/pki/admin.conf | tee ~/.k0s/kubeconfig
+- export KUBECONFIG="${HOME}/.k0s/kubeconfig"
+- kubectl get pods --all-namespaces
