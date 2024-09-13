@@ -11,6 +11,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: wordpress
+                name: wordpress-loadbalancer
                 port:
                   number: 80

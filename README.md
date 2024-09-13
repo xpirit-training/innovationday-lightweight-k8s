@@ -76,7 +76,8 @@ Requirements/boundaries
 The application was konverted from compose using kompose.
 
 Afterwards the manifests were modified:
-- change service to nodeport (only necessary if not using ingress)
+- add nodeport service (only necessary if not using ingress)
+- add loadbalancer service (if metallb used)
 - add ingress
 
 ```bash
@@ -87,22 +88,21 @@ cd innovationday-lightweight-k8s
 # create ns
 kubectl create ns innoday
 
+# change the context to avoid mention the innoday namespace
+config set-context --current --namespace innoday
+
 # deploy
-kubectl -n innoday apply -f manifests
+kubectl apply -f manifests
 
 # check deployment
-kubectl -n innoday get pods
+kubectl get pods
 ```
 
 ### Test access
 
-1. Get Nodeport: `kubectl -n innoday get svc wordpress -o jsonpath='{.spec.ports[0].nodePort}'`
+1. Get Nodeport: `kubectl get svc wordpress -o jsonpath='{.spec.ports[0].nodePort}'`
 2. Open this port in your azure network security group
 3. Access your application at `http://<machine ip>:<nodeport>`
-
-### Change context
-
-Change the kubectl context so you do not lways have to give the namespace in the commands: `config set-context --current --namespace innoday`
 
 ## Doc-Space
 
@@ -185,6 +185,7 @@ sudo mv ./kind /usr/local/bin/kind
 
 - [install](https://microk8s.io/docs/getting-started)
 - [addons](https://microk8s.io/docs/addons)
+- [http ingress](https://phoenixnap.com/kb/microk8s-ingress)
 
 ```bash
 # setup
@@ -210,6 +211,10 @@ microk8s enable ingress
 
 # add hostpath-storage
 microk8s enable hostpath-storage
+
+# add metallb
+export MACHINE_IP=<machine ip>
+microk8s enable metallb:${MACHINE_IP}-${MACHINE_IP}
 ```
 
 ### k0
