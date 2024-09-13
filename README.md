@@ -22,17 +22,17 @@ Requirements/boundaries
 
 ## Comparison of lightweight k8s distributions
 
-| Distribution               | k3s    | k3d    | kind | microk8s                                     | k0     |
-| -------------------------- | ------ | ------ | ---- | -------------------------------------------- | ------ |
-| Team Member                | Thomas | Stefan | Till | Marius                                       | Julian |
-| Setup & Configuration      |        |        |      | snap, few lines, lots of ready to use addons |        |
-| Required Container Runtime |        |        |      |                                              |        |
-| Ingress                    |        |        |      |                                              |        |
-| Compatibility              |        |        |      |                                              |        |
-| Scalability                |        |        |      |                                              |        |
-| Security                   |        |        |      |                                              |        |
-| Performance                |        |        |      |                                              |        |
-| Prod Ready                 |        |        |      |                                              |        |
+| Distribution               | k3s    | k3d    | kind              | microk8s                                     | k0     |
+| -------------------------- | ------ | ------ | ----------------- | -------------------------------------------- | ------ |
+| Team Member                | Thomas | Stefan | Till              | Marius                                       | Julian |
+| Setup & Configuration      |        |        | see [here](#kind) | snap, few lines, lots of ready to use addons |        |
+| Required Container Runtime |        |        |                   |                                              |        |
+| Ingress                    |        |        |                   |                                              |        |
+| Compatibility              |        |        |                   |                                              |        |
+| Scalability                |        |        |                   |                                              |        |
+| Security                   |        |        |                   |                                              |        |
+| Performance                |        |        |                   |                                              |        |
+| Prod Ready                 |        |        |                   |                                              |        |
 
 ## Resources
 
@@ -100,7 +100,7 @@ kubectl get pods
 
 ### Test access
 
-1. Get Nodeport: `kubectl get svc wordpress -o jsonpath='{.spec.ports[0].nodePort}'`
+1. Get Nodeport: `kubectl -n innoday get svc wordpress -o jsonpath='{.spec.ports[0].nodePort}'`
 2. Open this port in your azure network security group
 3. Access your application at `http://<machine ip>:<nodeport>`
 
@@ -167,9 +167,8 @@ Copy & Paste yml files for deployment of the wordpress application and do deploy
 - Install go: `sudo snap install go --classic`
 - Install docker: `sudo snap install docker`
 - Install kubectl: `sudo snap install kubectl --classic`
-- Install kind via go & start cluster: `go install sigs.k8s.io/kind@v0.24.0 && kind create cluster` didn't work for me
 - Install from binaries:
-```
+```bash
 [ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.24.0/kind-linux-amd64
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
