@@ -90,6 +90,13 @@ kubectl -n innoday get pods
 
 ### Test access
 
+1. Get Nodeport: `kubectl -n innoday get svc wordpress -o jsonpath='{.spec.ports[0].nodePort}'`
+2. Open this port in your azure network security group
+3. Access your application at `http://<machine ip>:<nodeport>`
+
+### Change context
+
+Change the kubectl context so you do not lways have to give the namespace in the commands: `config set-context --current --namespace innoday`
 
 ## Doc-Space
 
@@ -144,8 +151,10 @@ Copy & Paste yml files for deployment of the wordpress application and do deploy
 - Expose
 `vim expose.yml`
 `kubectl apply -f expose.yml`
+`kubectl get pods -w`
+`k3d cluster edit innodaycluster --port-add "30000-32767:30000-32767@server:0"`
 
-kubectl get pods -w
+
 
 ### kind
 #### setup
@@ -153,6 +162,7 @@ kubectl get pods -w
 - requires go & docker to be installed on the machine
 - Install go: `sudo snap install go --classic`
 - Install docker: `sudo snap install docker`
+- Install kubectl: `sudo snap install kubectl --classic`
 - Install kind via go & start cluster: `go install sigs.k8s.io/kind@v0.24.0 && kind create cluster` didn't work for me
 - Install from binaries:
 ```
@@ -160,10 +170,9 @@ kubectl get pods -w
 chmod +x ./kind
 sudo mv ./kind /usr/local/bin/kind
 ```
-- Install kubectl: `sudo snap install kubectl --classic`
 
 #### create a cluster
-- Create a cluster with: `kind create cluster`
+- Create a cluster with: `kind create cluster -n innoday --config kind/config-with-port-mapping.yaml`
 
 #### deyployment
 - Deploy the application using kubectl like described [here](#deploy-application)
