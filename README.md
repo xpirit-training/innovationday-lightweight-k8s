@@ -22,17 +22,17 @@ Requirements/boundaries
 
 ## Comparison of lightweight k8s distributions
 
-| Distribution               | k3s    | k3d    | kind              | microk8s                                     | k0     |
-| -------------------------- | ------ | ------ | ----------------- | -------------------------------------------- | ------ |
-| Team Member                | Thomas | Stefan | Till              | Marius                                       | Julian |
-| Setup & Configuration      |        |        | see [here](#kind) | snap, few lines, lots of ready to use addons |        |
-| Required Container Runtime |        |        |                   |                                              |        |
-| Ingress                    |        |        |                   |                                              |        |
-| Compatibility              |        |        |                   |                                              |        |
-| Scalability                |        |        |                   |                                              |        |
-| Security                   |        |        |                   |                                              |        |
-| Performance                |        |        |                   |                                              |        |
-| Prod Ready                 |        |        |                   |                                              |        |
+| Distribution               | k3s    | k3d    | kind              | microk8s                                                                            | k0     |
+| -------------------------- | ------ | ------ | ----------------- | ----------------------------------------------------------------------------------- | ------ |
+| Team Member                | Thomas | Stefan | Till              | Marius                                                                              | Julian |
+| Setup & Configuration      |        |        | see [here](#kind) | snap, few lines, lots of ready to use addons (dns,ingress,hostpath-storage,metallb) |        |
+| Required Container Runtime |        |        |                   | containerd (included)                                                               |        |
+| Ingress                    |        |        |                   | easy to setup (addon), traffic routed to nginx using metallb (addon)                |        |
+| Compatibility              |        |        |                   | linux with snapd                                                                    |        |
+| Scalability                |        |        |                   | easy, new nodes can be added with simple join commands                              |        |
+| Security                   |        |        |                   |                                                                                     |        |
+| Performance                |        |        |                   |                                                                                     |        |
+| Prod Ready                 |        |        |                   | :heavy_check_mark:                                                                  |        |
 
 ## Resources
 
