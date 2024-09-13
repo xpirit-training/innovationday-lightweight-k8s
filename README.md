@@ -73,6 +73,12 @@ Requirements/boundaries
 
 ### Deploy application
 
+The application was konverted from compose using kompose.
+
+Afterwards the manifests were modified:
+- change service to nodeport (only necessary if not using ingress)
+- add ingress
+
 ```bash
 # clone repo
 git clone https://github.com/xpirit-training/innovationday-lightweight-k8s.git
@@ -99,8 +105,6 @@ kubectl -n innoday get pods
 Change the kubectl context so you do not lways have to give the namespace in the commands: `config set-context --current --namespace innoday`
 
 ## Doc-Space
-
-### kompose
 
 ### k3s
 
