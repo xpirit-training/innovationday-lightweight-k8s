@@ -22,17 +22,18 @@ Requirements/boundaries
 
 ## Comparison of lightweight k8s distributions
 
-| Distribution               | k3s    | k3d    | kind              | microk8s                                                                            | k0     |
-| -------------------------- | ------ | ------ | ----------------- | ----------------------------------------------------------------------------------- | ------ |
-| Team Member                | Thomas | Stefan | Till              | Marius                                                                              | Julian |
-| Setup & Configuration      |        |        | see [here](#kind) | snap, few lines, lots of ready to use addons (dns,ingress,hostpath-storage,metallb) |        |
-| Required Container Runtime |        |        |                   | containerd (included)                                                               |        |
-| Ingress                    |        |        |                   | easy to setup (addon), traffic routed to nginx using metallb (addon)                |        |
-| Compatibility              |        |        |                   | linux with snapd                                                                    |        |
-| Scalability                |        |        |                   | easy, new nodes can be added with simple join commands                              |        |
-| Security                   |        |        |                   |                                                                                     |        |
-| Performance                |        |        |                   |                                                                                     |        |
-| Prod Ready                 |        |        |                   | :heavy_check_mark:                                                                  |        |
+| Distribution               | k3s    | k3d    | kind                                                 | microk8s                                                                            | k0     |
+| -------------------------- | ------ | ------ | ---------------------------------------------------- | ----------------------------------------------------------------------------------- | ------ |
+| Team Member                | Thomas | Stefan | Till                                                 | Marius                                                                              | Julian |
+| Setup & Configuration      |        |        | see [here](#kind)                                    | snap, few lines, lots of ready to use addons (dns,ingress,hostpath-storage,metallb) |        |
+| Doku                       |        |        | very good                                            | sehr gut                                                                            |        |
+| Required Container Runtime |        |        | docker, podman or nerdctl                            | containerd (included)                                                               |        |
+| Ingress                    |        |        | easy to setup with prepared nginx-ingress controller | easy to setup (addon), traffic routed to nginx using metallb (addon)                |        |
+| Prerequisites              |        |        | go (>=1.16), docker, podman or nerdctl               | linux with snapd                                                                    |        |
+| Scalability                |        |        | possible, but only when creating the cluster         | easy, new nodes can be added with simple join commands                              |        |
+| Security                   |        |        | tbd                                                  |                                                                                     |        |
+| Performance                |        |        | tbd                                                  |                                                                                     |        |
+| Prod Ready                 |        |        | :check_mark:                                         | :heavy_check_mark:                                                                  |        |
 
 ## Resources
 
@@ -89,7 +90,7 @@ cd innovationday-lightweight-k8s
 kubectl create ns innoday
 
 # change the context to avoid mention the innoday namespace
-config set-context --current --namespace innoday
+kubectl config set-context --current --namespace innoday
 
 # deploy
 kubectl apply -f manifests
@@ -159,7 +160,6 @@ Copy & Paste yml files for deployment of the wordpress application and do deploy
 `k3d cluster edit innodaycluster --port-add "30000-32767:30000-32767@server:0"`
 
 
-
 ### kind
 #### setup
 - [install](https://kind.sigs.k8s.io)
@@ -179,6 +179,12 @@ sudo mv ./kind /usr/local/bin/kind
 
 #### deyployment
 - Deploy the application using kubectl like described [here](#deploy-application)
+
+#### Ingress
+- Use the ingress-nginx controller with: `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml`
+
+#### Complete setup & deployment steps
+See [setup.sh](kind/setup.sh)
 
 ### microk8s
 
@@ -217,6 +223,7 @@ microk8s enable metallb:${MACHINE_IP}-${MACHINE_IP}
 ```
 
 ### k0
+- [docs](https://github.com/k0sproject/k0sctl#configuration-file-spec-fields)
 - [install_k0] (https://docs.k0sproject.io/stable/install/)
 - curl -sSLf https://get.k0s.sh | sudo sh
 - k0s install controller --single
@@ -242,6 +249,5 @@ sudo k0s server -c ${HOME}/.k0s/k0s.yaml --enable-worker < /dev/null &>/dev/null
 - sudo cat /var/lib/k0s/pki/admin.conf | tee ~/.k0s/kubeconfig
 - sudo curl --output /usr/local/sbin/kubectl -L "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
 - sudo chmod +x /usr/local/sbin/kubectl
-- sudo cat /var/lib/k0s/pki/admin.conf | tee ~/.k0s/kubeconfig
-- export KUBECONFIG="${HOME}/.k0s/kubeconfig"
+-  cat /var/lib/k0s/pki/admin.conf | tee ~/.kube/config
 - kubectl get pods --all-namespaces
